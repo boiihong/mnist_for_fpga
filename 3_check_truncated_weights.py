@@ -4,9 +4,22 @@ import random
 import numpy as np
 from tensorflow.examples.tutorials.mnist import input_data
 
+PATH_MODEL = 'model/'
+
+def saveParam(npArray, filename):
+	if len(npArray.shape) == 1:
+		npArray = np.array([npArray]) # convert to 2d array
+	shape = npArray.shape
+	f = open(filename, 'w')
+	f.write(str(shape[0]) + ' ' + str(shape[1]) + '\n')
+	f.close()
+
+	f = open(filename, 'ab')
+	np.savetxt(f, npArray)
+	f.close()
 
 def my_loadtxt(filename, row, col):
-	returnarr = np.zeros((row, col),dtype=float)
+	returnarr = np.zeros((row, col),dtype=int)
 	f = open(filename)
 	for i in range(0, row):
 	  x = f.readline()
@@ -65,4 +78,12 @@ print('Accuracy:', sess.run(accuracy, feed_dict={
       W1:w1, W2:w2, W3:w3, W4:w4, W5:w5, keep_prob: 1}))
 
 
+# dump..
+testx = mnist.test.images[0:1]
+
+saveParam(sess.run(L1, feed_dict={X: testx,W1:w1, W2:w2, W3:w3, W4:w4, W5:w5, keep_prob:1}), PATH_MODEL + 'l1.param')
+saveParam(sess.run(L2, feed_dict={X: testx,W1:w1, W2:w2, W3:w3, W4:w4, W5:w5, keep_prob:1}), PATH_MODEL + 'l2.param')
+saveParam(sess.run(L3, feed_dict={X: testx,W1:w1, W2:w2, W3:w3, W4:w4, W5:w5, keep_prob:1}), PATH_MODEL + 'l3.param')
+saveParam(sess.run(L4, feed_dict={X: testx,W1:w1, W2:w2, W3:w3, W4:w4, W5:w5, keep_prob:1}), PATH_MODEL + 'l4.param')
+saveParam(sess.run(hypothesis, feed_dict={X: testx, W1:w1, W2:w2, W3:w3, W4:w4, W5:w5,keep_prob:1}), PATH_MODEL + 'l5.param')
 
